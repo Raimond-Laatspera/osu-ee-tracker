@@ -1,0 +1,1 @@
+Full-Stack project to track estonian osu! players' scores, putting them into daily, weekly and monthly leaderboards.

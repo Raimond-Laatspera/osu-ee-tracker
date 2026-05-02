@@ -1,0 +1,53 @@
+enum GameMode {
+  STANDARD
+  TAIKO
+  CATCH
+  MANIA
+}
+
+enum ManiaKeys {
+  KEYS4
+  KEYS5
+  KEYS6
+  KEYS7
+  KEYS8
+  KEYS9
+  KEYS10
+  KEYS11
+  KEYS12
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Player {
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  country  String
+
+  scores   Score[]
+}
+
+model Score {
+  id        Int     @id @default(autoincrement())
+
+  playerId  Int
+  player    Player @relation(fields: [playerId], references: [id])
+
+  pp       Float
+  accuracy Float
+  rank    String?
+
+  gameMode GameMode
+
+  maniaKeys ManiaKeys? 
+
+  createdAt DateTime @default(now())
+
+  @@index([gameMode, pp])
+}

@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@nestjs/config": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14"
+  }
+}
