@@ -1,17 +1,42 @@
 # osu-ee-tracker
 
-A full-stack osu! tracker application with a Next.js frontend and a NestJS backend powered by Prisma and PostgreSQL.
+![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
+![Next.js](https://img.shields.io/badge/frontend-Next.js-black)
+![NestJS](https://img.shields.io/badge/backend-NestJS-red)
+![Prisma](https://img.shields.io/badge/ORM-Prisma-2D3748)
+![PostgreSQL](https://img.shields.io/badge/database-PostgreSQL-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+A full-stack osu! leaderboard tracker built with **Next.js** and **NestJS**, using **Prisma** and **PostgreSQL**.
+
+Track player scores, filter leaderboards, and explore performance across game modes.
+
+---
+
+## Features
+
+* Track osu! player scores
+* Leaderboards with filtering (game mode, time range)
+* Fast API with NestJS
+* Type-safe DB layer with Prisma
+* Modern frontend with Next.js + Tailwind
+
+---
+
+## Screenshots
+
+> *Will be added once front-end is more complete*
 
 ---
 
 ## Tech Stack
 
-| Layer    | Technology                        |
-|----------|-----------------------------------|
-| Frontend | Next.js (TypeScript, Tailwind CSS) |
-| Backend  | NestJS (TypeScript)               |
-| ORM      | Prisma                            |
-| Database | PostgreSQL                        |
+| Layer    | Technology                     |
+| -------- | ------------------------------ |
+| Frontend | Next.js (TypeScript, Tailwind) |
+| Backend  | NestJS (TypeScript)            |
+| ORM      | Prisma                         |
+| Database | PostgreSQL                     |
 
 ---
 
@@ -27,11 +52,9 @@ osu-ee-tracker
 
 ## Prerequisites
 
-Make sure the following are installed on your machine:
-
-- [Node.js](https://nodejs.org/) (v18 or later recommended)
-- [npm](https://www.npmjs.com/) (comes with Node.js)
-- [PostgreSQL](https://www.postgresql.org/) (running locally or via a cloud provider)
+* Node.js (v18+)
+* npm
+* PostgreSQL (local or hosted)
 
 ---
 
@@ -46,547 +69,290 @@ cd osu-ee-tracker
 
 ---
 
-### 2. Set up the backend (NestJS)
+## Backend Setup (NestJS)
 
 ```bash
 cd server
 npm install
 ```
 
-Create a `.env` file in the `server/` directory:
+### Install required dependencies
+
+```bash
+npm install @nestjs/config
+```
+
+---
+
+### Create `.env`
 
 ```env
 DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/osu_ee_tracker"
 ```
 
-Replace `USER`, `PASSWORD`, and the database name as needed.
+---
 
-Run Prisma migrations to set up the database schema:
+## First-Time Setup (IMPORTANT)
+
+You **must generate the Prisma client** before running the backend:
 
 ```bash
-npx prisma migrate deploy
+npx prisma generate
 ```
 
-Start the development server:
+If skipped, you may see errors like:
+
+* `PrismaClient not found`
+* Missing enums (`GameMode`, `ManiaKeys`)
+* `Property 'player' does not exist`
+
+---
+
+### Run database migrations
+
+```bash
+npx prisma migrate dev
+```
+
+---
+
+### Start backend
 
 ```bash
 npm run start:dev
 ```
 
-The API will be available at `http://localhost:3000` by default.
+API runs at:
+
+```
+http://localhost:3000
+```
 
 ---
 
-### 3. Set up the frontend (Next.js)
+## Frontend Setup (Next.js)
 
 ```bash
 cd ../client
 npm install
 ```
 
-Create a `.env.local` file in the `client/` directory:
+### Create `.env.local`
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-Adjust the URL if your backend runs on a different port.
+---
 
-Start the development server:
+### Start frontend
 
 ```bash
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:3001` (or the next available port).
+Frontend runs at:
+
+```
+http://localhost:3001
+```
 
 ---
 
-## Running Both Servers
+## Running Both
 
-You can open two terminal windows and run each server independently:
+**Terminal 1:**
 
-**Terminal 1 — Backend:**
 ```bash
 cd server
 npm run start:dev
 ```
 
-**Terminal 2 — Frontend:**
+**Terminal 2:**
+
 ```bash
 cd client
 npm run dev
 ```
 
-Alternatively, from the root you can use the root-level `package.json` scripts if configured.
+---
+
+## Database (Prisma)
+
+All commands must be run inside `/server`.
+
+```bash
+cd server
+```
+
+### Common commands
+
+```bash
+# Apply migrations
+npx prisma migrate dev
+
+# Generate client
+npx prisma generate
+
+# Open DB GUI
+npx prisma studio
+```
 
 ---
 
-## Database
+## Important Notes
 
-This project uses **Prisma** with **PostgreSQL**. Migration files are stored in `server/prisma/migrations/`.
+### Prisma commands must run in `/server`
 
-Useful commands (run from `server/`):
+Wrong:
 
 ```bash
-# Apply all pending migrations
-npx prisma migrate deploy
+npx prisma generate
+```
 
-# Open Prisma Studio (database GUI)
-npx prisma studio
+Correct:
 
-# Generate Prisma client after schema changes
+```bash
+cd server
 npx prisma generate
 ```
 
 ---
 
+## API Overview
+
+### Create Player
+
+```http
+POST /players
+```
+
+```json
+{
+  "username": "player1",
+  "country": "EE"
+}
+```
+
+---
+
+### 📥 Get Players
+
+```http
+GET /players
+```
+
+---
+
+### ➕ Submit Score
+
+```http
+POST /scores
+```
+
+```json
+{
+  "playerId": 1,
+  "pp": 250.5,
+  "accuracy": 98.76,
+  "gameMode": "MANIA",
+  "maniaKeys": "KEYS4",
+  "rank": "A"
+}
+```
+
+---
+
+### Get Leaderboard
+
+```http
+GET /scores/leaderboard?mode=MANIA&period=weekly
+```
+
+Query params:
+
+| Param  | Type   | Description          |
+| ------ | ------ | -------------------- |
+| mode   | enum   | GameMode filter      |
+| period | string | daily / weekly / all |
+
+---
+
+## Enums
+
+Defined in Prisma:
+
+```ts
+GameMode: STANDARD | TAIKO | CATCH | MANIA
+ManiaKeys: KEYS4 ... KEYS12
+```
+
+---
+
+## Troubleshooting
+
+### Prisma errors (VERY common)
+
+```bash
+cd server
+rm -rf node_modules package-lock.json
+npm install
+npx prisma generate
+```
+
+---
+
+### Schema changes not reflected
+
+```bash
+npx prisma migrate dev
+```
+
+---
+
+### Backend won’t start
+
+Check:
+
+* `.env` exists
+* PostgreSQL is running
+* `DATABASE_URL` is correct
+
+---
+
 ## Scripts
 
-### Server (`server/`)
+### Server
 
-| Command               | Description                          |
-|-----------------------|--------------------------------------|
-| `npm run start:dev`   | Start in watch/dev mode              |
-| `npm run start:prod`  | Start in production mode             |
-| `npm run build`       | Compile TypeScript                   |
-| `npm run test`        | Run unit tests                       |
-| `npm run test:e2e`    | Run end-to-end tests                 |
-| `npm run lint`        | Lint the codebase                    |
+| Command   | Description |
+| --------- | ----------- |
+| start:dev | Dev mode    |
+| build     | Compile TS  |
+| test      | Unit tests  |
+| test:e2e  | E2E tests   |
 
-### Client (`client/`)
+### Client
 
-| Command          | Description                          |
-|------------------|--------------------------------------|
-| `npm run dev`    | Start Next.js dev server             |
-| `npm run build`  | Build for production                 |
-| `npm run start`  | Start production build               |
-| `npm run lint`   | Lint the codebase                    |
+| Command | Description          |
+| ------- | -------------------- |
+| dev     | Start dev server     |
+| build   | Build app            |
+| start   | Run production build |
 
-```
-osu-ee-tracker
-├─ client
-│  ├─ app
-│  │  ├─ favicon.ico
-│  │  ├─ globals.css
-│  │  ├─ layout.tsx
-│  │  └─ page.tsx
-│  ├─ eslint.config.mjs
-│  ├─ lib
-│  │  ├─ api.ts
-│  │  └─ types.ts
-│  ├─ next-env.d.ts
-│  ├─ next.config.ts
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ postcss.config.mjs
-│  ├─ public
-│  │  ├─ file.svg
-│  │  ├─ globe.svg
-│  │  ├─ next.svg
-│  │  ├─ vercel.svg
-│  │  └─ window.svg
-│  ├─ README.md
-│  └─ tsconfig.json
-├─ package-lock.json
-├─ package.json
-├─ README.md
-└─ server
-   ├─ .prettierrc
-   ├─ eslint.config.mjs
-   ├─ nest-cli.json
-   ├─ package-lock.json
-   ├─ package.json
-   ├─ prisma
-   │  ├─ migrations
-   │  │  ├─ 20260430140409_init
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501084523_add_score
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501122445_init_clean
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501130020_make_rank_optional
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501132540_refactor
-   │  │  │  └─ migration.sql
-   │  │  └─ migration_lock.toml
-   │  └─ schema.prisma
-   ├─ prisma.config.ts
-   ├─ README.md
-   ├─ src
-   │  ├─ app.controller.spec.ts
-   │  ├─ app.controller.ts
-   │  ├─ app.module.ts
-   │  ├─ app.service.ts
-   │  ├─ dto
-   │  │  └─ create-score.dto.ts
-   │  ├─ leaderboard-query.dto.ts
-   │  ├─ main.ts
-   │  ├─ players.controller.ts
-   │  ├─ players.service.ts
-   │  ├─ prisma.service.ts
-   │  ├─ scores.controller.ts
-   │  ├─ scores.service.ts
-   │  └─ time-range.util.ts
-   ├─ test
-   │  ├─ app.e2e-spec.ts
-   │  └─ jest-e2e.json
-   ├─ tsconfig.build.json
-   └─ tsconfig.json
+---
 
-```
-```
-osu-ee-tracker
-├─ client
-│  ├─ app
-│  │  ├─ favicon.ico
-│  │  ├─ globals.css
-│  │  ├─ layout.tsx
-│  │  └─ page.tsx
-│  ├─ eslint.config.mjs
-│  ├─ lib
-│  │  ├─ api.ts
-│  │  └─ types.ts
-│  ├─ next-env.d.ts
-│  ├─ next.config.ts
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ postcss.config.mjs
-│  ├─ public
-│  │  ├─ file.svg
-│  │  ├─ globe.svg
-│  │  ├─ next.svg
-│  │  ├─ vercel.svg
-│  │  └─ window.svg
-│  ├─ README.md
-│  └─ tsconfig.json
-├─ package-lock.json
-├─ package.json
-├─ README.md
-└─ server
-   ├─ .prettierrc
-   ├─ eslint.config.mjs
-   ├─ nest-cli.json
-   ├─ package-lock.json
-   ├─ package.json
-   ├─ prisma
-   │  ├─ migrations
-   │  │  ├─ 20260430140409_init
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501084523_add_score
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501122445_init_clean
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501130020_make_rank_optional
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501132540_refactor
-   │  │  │  └─ migration.sql
-   │  │  └─ migration_lock.toml
-   │  └─ schema.prisma
-   ├─ prisma.config.ts
-   ├─ README.md
-   ├─ src
-   │  ├─ app.controller.spec.ts
-   │  ├─ app.controller.ts
-   │  ├─ app.module.ts
-   │  ├─ app.service.ts
-   │  ├─ common
-   │  │  ├─ dto
-   │  │  │  ├─ create-score.dto.ts
-   │  │  │  └─ leaderboard-query.dto.ts
-   │  │  └─ utils
-   │  │     └─ time-range.util.ts
-   │  ├─ main.ts
-   │  ├─ modules
-   │  │  ├─ osu
-   │  │  │  ├─ osu.module.ts
-   │  │  │  └─ osu.service.ts
-   │  │  ├─ players
-   │  │  │  ├─ players.controller.ts
-   │  │  │  ├─ players.module.ts
-   │  │  │  └─ players.service.ts
-   │  │  ├─ polling
-   │  │  │  ├─ polling.module.ts
-   │  │  │  └─ polling.service.ts
-   │  │  └─ scores
-   │  │     ├─ scores.controller.ts
-   │  │     ├─ scores.modules.ts
-   │  │     └─ scores.service.ts
-   │  └─ prisma
-   │     └─ prisma.service.ts
-   ├─ test
-   │  ├─ app.e2e-spec.ts
-   │  └─ jest-e2e.json
-   ├─ tsconfig.build.json
-   └─ tsconfig.json
+## Future Improvements
 
-```
-```
-osu-ee-tracker
-├─ client
-│  ├─ app
-│  │  ├─ favicon.ico
-│  │  ├─ globals.css
-│  │  ├─ layout.tsx
-│  │  └─ page.tsx
-│  ├─ eslint.config.mjs
-│  ├─ lib
-│  │  ├─ api.ts
-│  │  └─ types.ts
-│  ├─ next-env.d.ts
-│  ├─ next.config.ts
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ postcss.config.mjs
-│  ├─ public
-│  │  ├─ file.svg
-│  │  ├─ globe.svg
-│  │  ├─ next.svg
-│  │  ├─ vercel.svg
-│  │  └─ window.svg
-│  ├─ README.md
-│  └─ tsconfig.json
-├─ package-lock.json
-├─ package.json
-├─ README.md
-└─ server
-   ├─ .prettierrc
-   ├─ eslint.config.mjs
-   ├─ nest-cli.json
-   ├─ package-lock.json
-   ├─ package.json
-   ├─ prisma
-   │  ├─ migrations
-   │  │  ├─ 20260430140409_init
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501084523_add_score
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501122445_init_clean
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501130020_make_rank_optional
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501132540_refactor
-   │  │  │  └─ migration.sql
-   │  │  └─ migration_lock.toml
-   │  └─ schema.prisma
-   ├─ prisma.config.ts
-   ├─ README.md
-   ├─ src
-   │  ├─ app.controller.spec.ts
-   │  ├─ app.controller.ts
-   │  ├─ app.module.ts
-   │  ├─ app.service.ts
-   │  ├─ common
-   │  │  ├─ dto
-   │  │  │  ├─ create-score.dto.ts
-   │  │  │  └─ leaderboard-query.dto.ts
-   │  │  └─ utils
-   │  │     └─ time-range.util.ts
-   │  ├─ main.ts
-   │  ├─ modules
-   │  │  ├─ osu
-   │  │  │  ├─ osu.module.ts
-   │  │  │  └─ osu.service.ts
-   │  │  ├─ players
-   │  │  │  ├─ players.controller.ts
-   │  │  │  ├─ players.module.ts
-   │  │  │  └─ players.service.ts
-   │  │  ├─ polling
-   │  │  │  ├─ polling.module.ts
-   │  │  │  └─ polling.service.ts
-   │  │  └─ scores
-   │  │     ├─ scores.controller.ts
-   │  │     ├─ scores.modules.ts
-   │  │     └─ scores.service.ts
-   │  └─ prisma
-   │     └─ prisma.service.ts
-   ├─ test
-   │  ├─ app.e2e-spec.ts
-   │  └─ jest-e2e.json
-   ├─ tsconfig.build.json
-   └─ tsconfig.json
+* Auth system (JWT)
+* Pagination for leaderboards
+* osu! API integration
+* Caching (Redis)
+* Docker setup
 
-```
-```
-osu-ee-tracker
-├─ client
-│  ├─ app
-│  │  ├─ favicon.ico
-│  │  ├─ globals.css
-│  │  ├─ layout.tsx
-│  │  └─ page.tsx
-│  ├─ eslint.config.mjs
-│  ├─ lib
-│  │  ├─ api.ts
-│  │  └─ types.ts
-│  ├─ next-env.d.ts
-│  ├─ next.config.ts
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ postcss.config.mjs
-│  ├─ public
-│  │  ├─ file.svg
-│  │  ├─ globe.svg
-│  │  ├─ next.svg
-│  │  ├─ vercel.svg
-│  │  └─ window.svg
-│  ├─ README.md
-│  └─ tsconfig.json
-├─ package-lock.json
-├─ package.json
-├─ README.md
-└─ server
-   ├─ .prettierrc
-   ├─ eslint.config.mjs
-   ├─ nest-cli.json
-   ├─ package-lock.json
-   ├─ package.json
-   ├─ prisma
-   │  ├─ migrations
-   │  │  ├─ 20260430140409_init
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501084523_add_score
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501122445_init_clean
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501130020_make_rank_optional
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501132540_refactor
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260506152256_test1
-   │  │  │  └─ migration.sql
-   │  │  └─ migration_lock.toml
-   │  └─ schema.prisma
-   ├─ prisma.config.ts
-   ├─ README.md
-   ├─ src
-   │  ├─ app.controller.spec.ts
-   │  ├─ app.controller.ts
-   │  ├─ app.module.ts
-   │  ├─ app.service.ts
-   │  ├─ common
-   │  │  ├─ dto
-   │  │  │  ├─ create-score.dto.ts
-   │  │  │  └─ leaderboard-query.dto.ts
-   │  │  └─ utils
-   │  │     └─ time-range.util.ts
-   │  ├─ main.ts
-   │  ├─ modules
-   │  │  ├─ osu
-   │  │  │  ├─ osu.module.ts
-   │  │  │  └─ osu.service.ts
-   │  │  ├─ players
-   │  │  │  ├─ players.controller.ts
-   │  │  │  ├─ players.module.ts
-   │  │  │  └─ players.service.ts
-   │  │  ├─ polling
-   │  │  │  ├─ osu-api.service.ts
-   │  │  │  ├─ osu-api.types.ts
-   │  │  │  ├─ polling.module.ts
-   │  │  │  └─ polling.service.ts
-   │  │  └─ scores
-   │  │     ├─ scores.controller.ts
-   │  │     ├─ scores.module.ts
-   │  │     └─ scores.service.ts
-   │  └─ prisma
-   │     └─ prisma.service.ts
-   ├─ test
-   │  ├─ app.e2e-spec.ts
-   │  └─ jest-e2e.json
-   ├─ tsconfig.build.json
-   └─ tsconfig.json
+---
 
-```
-```
-osu-ee-tracker
-├─ client
-│  ├─ app
-│  │  ├─ favicon.ico
-│  │  ├─ globals.css
-│  │  ├─ layout.tsx
-│  │  └─ page.tsx
-│  ├─ eslint.config.mjs
-│  ├─ lib
-│  │  ├─ api.ts
-│  │  └─ types.ts
-│  ├─ next-env.d.ts
-│  ├─ next.config.ts
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ postcss.config.mjs
-│  ├─ public
-│  │  ├─ file.svg
-│  │  ├─ globe.svg
-│  │  ├─ next.svg
-│  │  ├─ vercel.svg
-│  │  └─ window.svg
-│  ├─ README.md
-│  └─ tsconfig.json
-├─ package-lock.json
-├─ package.json
-├─ README.md
-└─ server
-   ├─ .prettierrc
-   ├─ eslint.config.mjs
-   ├─ nest-cli.json
-   ├─ package-lock.json
-   ├─ package.json
-   ├─ prisma
-   │  ├─ migrations
-   │  │  ├─ 20260430140409_init
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501084523_add_score
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501122445_init_clean
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501130020_make_rank_optional
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260501132540_refactor
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260506152256_test1
-   │  │  │  └─ migration.sql
-   │  │  ├─ 20260506155917_remove_rank
-   │  │  │  └─ migration.sql
-   │  │  └─ migration_lock.toml
-   │  └─ schema.prisma
-   ├─ prisma.config.ts
-   ├─ README.md
-   ├─ src
-   │  ├─ app.controller.spec.ts
-   │  ├─ app.controller.ts
-   │  ├─ app.module.ts
-   │  ├─ app.service.ts
-   │  ├─ common
-   │  │  ├─ dto
-   │  │  │  ├─ create-score.dto.ts
-   │  │  │  └─ leaderboard-query.dto.ts
-   │  │  └─ utils
-   │  │     └─ time-range.util.ts
-   │  ├─ main.ts
-   │  ├─ modules
-   │  │  ├─ beatmaps
-   │  │  ├─ osu
-   │  │  │  ├─ osu.module.ts
-   │  │  │  └─ osu.service.ts
-   │  │  ├─ players
-   │  │  │  ├─ players.controller.ts
-   │  │  │  ├─ players.module.ts
-   │  │  │  └─ players.service.ts
-   │  │  ├─ polling
-   │  │  │  ├─ osu-api.service.ts
-   │  │  │  ├─ osu-api.types.ts
-   │  │  │  ├─ polling.module.ts
-   │  │  │  └─ polling.service.ts
-   │  │  └─ scores
-   │  │     ├─ scores.controller.ts
-   │  │     ├─ scores.module.ts
-   │  │     └─ scores.service.ts
-   │  └─ prisma
-   │     └─ prisma.service.ts
-   ├─ test
-   │  ├─ app.e2e-spec.ts
-   │  └─ jest-e2e.json
-   ├─ tsconfig.build.json
-   └─ tsconfig.json
+## License
 
-```
+MIT License
+
+---
