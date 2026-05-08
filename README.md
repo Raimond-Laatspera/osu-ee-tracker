@@ -162,3 +162,431 @@ npx prisma generate
 | `npm run build`  | Build for production                 |
 | `npm run start`  | Start production build               |
 | `npm run lint`   | Lint the codebase                    |
+
+```
+osu-ee-tracker
+├─ client
+│  ├─ app
+│  │  ├─ favicon.ico
+│  │  ├─ globals.css
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ eslint.config.mjs
+│  ├─ lib
+│  │  ├─ api.ts
+│  │  └─ types.ts
+│  ├─ next-env.d.ts
+│  ├─ next.config.ts
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ postcss.config.mjs
+│  ├─ public
+│  │  ├─ file.svg
+│  │  ├─ globe.svg
+│  │  ├─ next.svg
+│  │  ├─ vercel.svg
+│  │  └─ window.svg
+│  ├─ README.md
+│  └─ tsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ server
+   ├─ .prettierrc
+   ├─ eslint.config.mjs
+   ├─ nest-cli.json
+   ├─ package-lock.json
+   ├─ package.json
+   ├─ prisma
+   │  ├─ migrations
+   │  │  ├─ 20260430140409_init
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501084523_add_score
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501122445_init_clean
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501130020_make_rank_optional
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501132540_refactor
+   │  │  │  └─ migration.sql
+   │  │  └─ migration_lock.toml
+   │  └─ schema.prisma
+   ├─ prisma.config.ts
+   ├─ README.md
+   ├─ src
+   │  ├─ app.controller.spec.ts
+   │  ├─ app.controller.ts
+   │  ├─ app.module.ts
+   │  ├─ app.service.ts
+   │  ├─ dto
+   │  │  └─ create-score.dto.ts
+   │  ├─ leaderboard-query.dto.ts
+   │  ├─ main.ts
+   │  ├─ players.controller.ts
+   │  ├─ players.service.ts
+   │  ├─ prisma.service.ts
+   │  ├─ scores.controller.ts
+   │  ├─ scores.service.ts
+   │  └─ time-range.util.ts
+   ├─ test
+   │  ├─ app.e2e-spec.ts
+   │  └─ jest-e2e.json
+   ├─ tsconfig.build.json
+   └─ tsconfig.json
+
+```
+```
+osu-ee-tracker
+├─ client
+│  ├─ app
+│  │  ├─ favicon.ico
+│  │  ├─ globals.css
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ eslint.config.mjs
+│  ├─ lib
+│  │  ├─ api.ts
+│  │  └─ types.ts
+│  ├─ next-env.d.ts
+│  ├─ next.config.ts
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ postcss.config.mjs
+│  ├─ public
+│  │  ├─ file.svg
+│  │  ├─ globe.svg
+│  │  ├─ next.svg
+│  │  ├─ vercel.svg
+│  │  └─ window.svg
+│  ├─ README.md
+│  └─ tsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ server
+   ├─ .prettierrc
+   ├─ eslint.config.mjs
+   ├─ nest-cli.json
+   ├─ package-lock.json
+   ├─ package.json
+   ├─ prisma
+   │  ├─ migrations
+   │  │  ├─ 20260430140409_init
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501084523_add_score
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501122445_init_clean
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501130020_make_rank_optional
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501132540_refactor
+   │  │  │  └─ migration.sql
+   │  │  └─ migration_lock.toml
+   │  └─ schema.prisma
+   ├─ prisma.config.ts
+   ├─ README.md
+   ├─ src
+   │  ├─ app.controller.spec.ts
+   │  ├─ app.controller.ts
+   │  ├─ app.module.ts
+   │  ├─ app.service.ts
+   │  ├─ common
+   │  │  ├─ dto
+   │  │  │  ├─ create-score.dto.ts
+   │  │  │  └─ leaderboard-query.dto.ts
+   │  │  └─ utils
+   │  │     └─ time-range.util.ts
+   │  ├─ main.ts
+   │  ├─ modules
+   │  │  ├─ osu
+   │  │  │  ├─ osu.module.ts
+   │  │  │  └─ osu.service.ts
+   │  │  ├─ players
+   │  │  │  ├─ players.controller.ts
+   │  │  │  ├─ players.module.ts
+   │  │  │  └─ players.service.ts
+   │  │  ├─ polling
+   │  │  │  ├─ polling.module.ts
+   │  │  │  └─ polling.service.ts
+   │  │  └─ scores
+   │  │     ├─ scores.controller.ts
+   │  │     ├─ scores.modules.ts
+   │  │     └─ scores.service.ts
+   │  └─ prisma
+   │     └─ prisma.service.ts
+   ├─ test
+   │  ├─ app.e2e-spec.ts
+   │  └─ jest-e2e.json
+   ├─ tsconfig.build.json
+   └─ tsconfig.json
+
+```
+```
+osu-ee-tracker
+├─ client
+│  ├─ app
+│  │  ├─ favicon.ico
+│  │  ├─ globals.css
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ eslint.config.mjs
+│  ├─ lib
+│  │  ├─ api.ts
+│  │  └─ types.ts
+│  ├─ next-env.d.ts
+│  ├─ next.config.ts
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ postcss.config.mjs
+│  ├─ public
+│  │  ├─ file.svg
+│  │  ├─ globe.svg
+│  │  ├─ next.svg
+│  │  ├─ vercel.svg
+│  │  └─ window.svg
+│  ├─ README.md
+│  └─ tsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ server
+   ├─ .prettierrc
+   ├─ eslint.config.mjs
+   ├─ nest-cli.json
+   ├─ package-lock.json
+   ├─ package.json
+   ├─ prisma
+   │  ├─ migrations
+   │  │  ├─ 20260430140409_init
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501084523_add_score
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501122445_init_clean
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501130020_make_rank_optional
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501132540_refactor
+   │  │  │  └─ migration.sql
+   │  │  └─ migration_lock.toml
+   │  └─ schema.prisma
+   ├─ prisma.config.ts
+   ├─ README.md
+   ├─ src
+   │  ├─ app.controller.spec.ts
+   │  ├─ app.controller.ts
+   │  ├─ app.module.ts
+   │  ├─ app.service.ts
+   │  ├─ common
+   │  │  ├─ dto
+   │  │  │  ├─ create-score.dto.ts
+   │  │  │  └─ leaderboard-query.dto.ts
+   │  │  └─ utils
+   │  │     └─ time-range.util.ts
+   │  ├─ main.ts
+   │  ├─ modules
+   │  │  ├─ osu
+   │  │  │  ├─ osu.module.ts
+   │  │  │  └─ osu.service.ts
+   │  │  ├─ players
+   │  │  │  ├─ players.controller.ts
+   │  │  │  ├─ players.module.ts
+   │  │  │  └─ players.service.ts
+   │  │  ├─ polling
+   │  │  │  ├─ polling.module.ts
+   │  │  │  └─ polling.service.ts
+   │  │  └─ scores
+   │  │     ├─ scores.controller.ts
+   │  │     ├─ scores.modules.ts
+   │  │     └─ scores.service.ts
+   │  └─ prisma
+   │     └─ prisma.service.ts
+   ├─ test
+   │  ├─ app.e2e-spec.ts
+   │  └─ jest-e2e.json
+   ├─ tsconfig.build.json
+   └─ tsconfig.json
+
+```
+```
+osu-ee-tracker
+├─ client
+│  ├─ app
+│  │  ├─ favicon.ico
+│  │  ├─ globals.css
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ eslint.config.mjs
+│  ├─ lib
+│  │  ├─ api.ts
+│  │  └─ types.ts
+│  ├─ next-env.d.ts
+│  ├─ next.config.ts
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ postcss.config.mjs
+│  ├─ public
+│  │  ├─ file.svg
+│  │  ├─ globe.svg
+│  │  ├─ next.svg
+│  │  ├─ vercel.svg
+│  │  └─ window.svg
+│  ├─ README.md
+│  └─ tsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ server
+   ├─ .prettierrc
+   ├─ eslint.config.mjs
+   ├─ nest-cli.json
+   ├─ package-lock.json
+   ├─ package.json
+   ├─ prisma
+   │  ├─ migrations
+   │  │  ├─ 20260430140409_init
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501084523_add_score
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501122445_init_clean
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501130020_make_rank_optional
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501132540_refactor
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260506152256_test1
+   │  │  │  └─ migration.sql
+   │  │  └─ migration_lock.toml
+   │  └─ schema.prisma
+   ├─ prisma.config.ts
+   ├─ README.md
+   ├─ src
+   │  ├─ app.controller.spec.ts
+   │  ├─ app.controller.ts
+   │  ├─ app.module.ts
+   │  ├─ app.service.ts
+   │  ├─ common
+   │  │  ├─ dto
+   │  │  │  ├─ create-score.dto.ts
+   │  │  │  └─ leaderboard-query.dto.ts
+   │  │  └─ utils
+   │  │     └─ time-range.util.ts
+   │  ├─ main.ts
+   │  ├─ modules
+   │  │  ├─ osu
+   │  │  │  ├─ osu.module.ts
+   │  │  │  └─ osu.service.ts
+   │  │  ├─ players
+   │  │  │  ├─ players.controller.ts
+   │  │  │  ├─ players.module.ts
+   │  │  │  └─ players.service.ts
+   │  │  ├─ polling
+   │  │  │  ├─ osu-api.service.ts
+   │  │  │  ├─ osu-api.types.ts
+   │  │  │  ├─ polling.module.ts
+   │  │  │  └─ polling.service.ts
+   │  │  └─ scores
+   │  │     ├─ scores.controller.ts
+   │  │     ├─ scores.module.ts
+   │  │     └─ scores.service.ts
+   │  └─ prisma
+   │     └─ prisma.service.ts
+   ├─ test
+   │  ├─ app.e2e-spec.ts
+   │  └─ jest-e2e.json
+   ├─ tsconfig.build.json
+   └─ tsconfig.json
+
+```
+```
+osu-ee-tracker
+├─ client
+│  ├─ app
+│  │  ├─ favicon.ico
+│  │  ├─ globals.css
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ eslint.config.mjs
+│  ├─ lib
+│  │  ├─ api.ts
+│  │  └─ types.ts
+│  ├─ next-env.d.ts
+│  ├─ next.config.ts
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ postcss.config.mjs
+│  ├─ public
+│  │  ├─ file.svg
+│  │  ├─ globe.svg
+│  │  ├─ next.svg
+│  │  ├─ vercel.svg
+│  │  └─ window.svg
+│  ├─ README.md
+│  └─ tsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ README.md
+└─ server
+   ├─ .prettierrc
+   ├─ eslint.config.mjs
+   ├─ nest-cli.json
+   ├─ package-lock.json
+   ├─ package.json
+   ├─ prisma
+   │  ├─ migrations
+   │  │  ├─ 20260430140409_init
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501084523_add_score
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501122445_init_clean
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501130020_make_rank_optional
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260501132540_refactor
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260506152256_test1
+   │  │  │  └─ migration.sql
+   │  │  ├─ 20260506155917_remove_rank
+   │  │  │  └─ migration.sql
+   │  │  └─ migration_lock.toml
+   │  └─ schema.prisma
+   ├─ prisma.config.ts
+   ├─ README.md
+   ├─ src
+   │  ├─ app.controller.spec.ts
+   │  ├─ app.controller.ts
+   │  ├─ app.module.ts
+   │  ├─ app.service.ts
+   │  ├─ common
+   │  │  ├─ dto
+   │  │  │  ├─ create-score.dto.ts
+   │  │  │  └─ leaderboard-query.dto.ts
+   │  │  └─ utils
+   │  │     └─ time-range.util.ts
+   │  ├─ main.ts
+   │  ├─ modules
+   │  │  ├─ beatmaps
+   │  │  ├─ osu
+   │  │  │  ├─ osu.module.ts
+   │  │  │  └─ osu.service.ts
+   │  │  ├─ players
+   │  │  │  ├─ players.controller.ts
+   │  │  │  ├─ players.module.ts
+   │  │  │  └─ players.service.ts
+   │  │  ├─ polling
+   │  │  │  ├─ osu-api.service.ts
+   │  │  │  ├─ osu-api.types.ts
+   │  │  │  ├─ polling.module.ts
+   │  │  │  └─ polling.service.ts
+   │  │  └─ scores
+   │  │     ├─ scores.controller.ts
+   │  │     ├─ scores.module.ts
+   │  │     └─ scores.service.ts
+   │  └─ prisma
+   │     └─ prisma.service.ts
+   ├─ test
+   │  ├─ app.e2e-spec.ts
+   │  └─ jest-e2e.json
+   ├─ tsconfig.build.json
+   └─ tsconfig.json
+
+```

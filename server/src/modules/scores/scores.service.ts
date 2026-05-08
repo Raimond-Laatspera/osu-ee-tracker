@@ -1,29 +1,85 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { GameMode } from '@prisma/client';
 import { ManiaKeys } from '@prisma/client';
-import { getDateRange } from './time-range.util';
+import { getDateRange } from '../../common/utils/time-range.util';
+import { BeatmapsService } from '../beatmaps/beatmaps.service';
 
 @Injectable()
 export class ScoresService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private beatmapsService: BeatmapsService,
+  ) {}
 
   async create(data: {
+    id: bigint;
+
     playerId: number;
+
+    beatmap: {
+      id: number;
+      beatmapsetId: number;
+
+      artist: string;
+      title: string;
+      version: string;
+
+      mode: GameMode;
+
+      difficultyRating?: number;
+      bpm?: number;
+    };
+
     pp: number;
     accuracy: number;
+
     gameMode: GameMode;
     maniaKeys?: ManiaKeys;
+
+    combo?: number;
+    score?: bigint;
+
+    mods?: number;
     rank?: string;
+
+    createdAt: Date;
   }) {
-    return this.prisma.score.create({
-      data,
+    await this.beatmapsService.upsertBeatmap(data.beatmap);
+
+    return this.prisma.score.upsert({
+      where: {
+        id: data.id,
+      },
+
+      update: {},
+
+      create: {
+        id: data.id,
+
+        playerId: data.playerId,
+        beatmapId: data.beatmap.id,
+
+        pp: data.pp,
+        accuracy: data.accuracy,
+
+        gameMode: data.gameMode,
+        maniaKeys: data.maniaKeys,
+
+        combo: data.combo,
+        score: data.score,
+
+        mods: data.mods,
+        rank: data.rank,
+
+        createdAt: data.createdAt,
+      },
     });
   }
 
   async findAll() {
     return this.prisma.score.findMany({
-      include: { player: true },
+      include: { player: true, beatmap: true },
       orderBy: { pp: 'desc' },
     });
   }
@@ -56,6 +112,7 @@ export class ScoresService {
         skip,
         include: {
           player: true,
+          beatmap: true,
         },
       }),
 

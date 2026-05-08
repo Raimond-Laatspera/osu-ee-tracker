@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Score" ALTER COLUMN "rank" DROP NOT NULL;

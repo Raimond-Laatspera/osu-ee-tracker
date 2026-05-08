@@ -6,7 +6,7 @@ export async function getLeaderboard(params: {
   mode?: string;
   period?: string;
   limit?: number;
-}): Promise<Score[]> {
+}): Promise<{ items: Score[] }> {
   const query = new URLSearchParams();
 
   if (params.mode) query.append('mode', params.mode);
@@ -19,5 +19,5 @@ export async function getLeaderboard(params: {
     throw new Error('Failed to fetch leaderboard');
   }
 
-  return res.json();
+  return res.json() as Promise<{ items: Score[] }>;
 }

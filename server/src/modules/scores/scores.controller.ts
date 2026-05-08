@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ScoresService } from './scores.service';
+import { ScoresService } from '../../modules/scores/scores.service';
 import { GameMode } from '@prisma/client';
 import { ManiaKeys } from '@prisma/client';
 
@@ -16,16 +16,52 @@ export class ScoresController {
   create(
     @Body()
     body: {
+      id: bigint;
+
       playerId: number;
+
+      beatmap: {
+        id: number;
+        beatmapsetId: number;
+
+        artist: string;
+        title: string;
+        version: string;
+
+        mode: GameMode;
+
+        difficultyRating?: number;
+        bpm?: number;
+      };
+
       pp: number;
       accuracy: number;
+
       gameMode: GameMode;
+
       maniaKeys?: ManiaKeys;
+
+      combo?: number;
+      score?: bigint;
+
+      mods?: number;
       rank?: string;
+
+      createdAt: Date;
     },
   ) {
     return this.scoresService.create(body);
   }
+
+  MODE_MAP: Record<string, GameMode> = {
+    OSU: GameMode.OSU,
+    TAIKO: GameMode.TAIKO,
+    FRUITS: GameMode.FRUITS,
+    MANIA: GameMode.MANIA,
+
+    STANDARD: GameMode.OSU,
+    CATCH: GameMode.FRUITS,
+  };
 
   @Get('leaderboard')
   getLeaderboard(
@@ -34,8 +70,10 @@ export class ScoresController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
+    const resolvedMode = mode ? this.MODE_MAP[mode.toUpperCase()] : undefined;
+
     return this.scoresService.findLeaderboard(
-      mode,
+      resolvedMode,
       period,
       Number(page || 1),
       Number(limit || 50),
