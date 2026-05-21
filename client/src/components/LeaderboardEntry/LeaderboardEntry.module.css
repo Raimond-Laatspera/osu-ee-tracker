@@ -1,0 +1,438 @@
+/* ========================= */
+/* Entry */
+/* ========================= */
+
+.leaderboardEntry {
+  display: flex;
+  align-items: center;
+
+  width: min(1100px, 100%);
+  min-height: 76px;
+
+  padding: 10px 16px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(22, 22, 30, 0.96),
+    rgba(36, 36, 50, 0.94)
+  );
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.35),
+    inset 0 1px rgba(255,255,255,0.04);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+
+  box-sizing: border-box;
+  margin-bottom: 4px;
+}
+
+.leaderboardEntry:hover {
+  transform: scale(1.01);
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.45),
+    0 0 18px rgba(255,105,180,0.15);
+}
+
+/* ========================= */
+/* Rank */
+/* ========================= */
+
+.rank {
+  width: 52px;
+
+  flex-shrink: 0;
+
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+
+  color: #ff66aa;
+
+  text-shadow:
+    0 0 10px rgba(255,102,170,0.45);
+}
+
+/* ========================= */
+/* Username */
+/* ========================= */
+
+.name {
+  width: 140px;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  margin-right: 12px;
+
+  color: white;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.name span {
+  display: inline-block;
+}
+/* ========================= */
+/* Beatmap */
+/* ========================= */
+
+.beatmap {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex: 1;
+
+  min-width: 320px;
+  max-width: 560px;
+
+  height: 64px;
+
+  padding: 0 18px;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  margin-right: 12px;
+}
+
+.beatmap::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.82) 0%,
+    rgba(0,0,0,0.55) 55%,
+    rgba(0,0,0,0.35) 100%
+  );
+}
+
+.beatmap > * {
+  position: relative;
+  z-index: 1;
+}
+
+.beatmapLeft {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.song {
+  width: 100%;
+
+  overflow: hidden;
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  margin-bottom: 6px;
+
+  white-space: nowrap;
+}
+
+.song span {
+  display: inline-block;
+}
+
+.mapStats {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.starRating {
+  padding: 0px 10px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    #ff66aa,
+    #9b4dff
+  );
+
+  color: white;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.stat {
+  padding: 2px 8px;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.08);
+
+  color: rgba(255,255,255,0.82);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  backdrop-filter: blur(4px);
+
+  white-space: nowrap;
+}
+
+/* ========================= */
+/* Grade + Accuracy */
+/* ========================= */
+
+.beatmapRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  margin-left: 14px;
+
+  flex-shrink: 0;
+}
+
+.grade {
+  font-size: 22px;
+  font-weight: 900;
+
+  color: #ffe066;
+
+  line-height: 1;
+}
+
+.accuracy {
+  font-size: 14px;
+  font-weight: 700;
+
+  color: white;
+}
+
+/* ========================= */
+/* Mods */
+/* ========================= */
+
+.mods {
+  display: grid;
+
+  grid-template-columns: repeat(2, 36px);
+
+  justify-content: center;
+
+  gap: 4px;
+
+  width: 76px;
+
+  margin-right: 8px;
+
+  flex-shrink: 0;
+}
+
+.modBubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 30px;
+  height: 18px;
+
+  padding: 0 6px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  color: white;
+
+  box-shadow:
+    inset 0 1px rgba(255,255,255,0.15),
+    0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* DT */
+
+.modDT {
+  background: linear-gradient(
+    135deg,
+    #8b5cf6,
+    #6d28d9
+  );
+}
+
+/* HD */
+
+.modHD {
+  background: linear-gradient(
+    135deg,
+    #ffd95e,
+    #ffb800
+  );
+
+  color: #2b2100;
+}
+
+.modHR {
+  background: linear-gradient(
+    135deg,
+    #ff5555,
+    #d61f1f
+  );
+}
+
+.modFL {
+  background: linear-gradient(
+    135deg,
+    #222,
+    #000
+  );
+}
+
+.modEZ {
+  background: linear-gradient(
+    135deg,
+    #58d68d,
+    #1e8449
+  );
+}
+
+.modNM {
+  background: linear-gradient(
+    135deg,
+    #444,
+    #222
+  );
+}
+
+/* Default */
+
+.modDefault {
+  background: linear-gradient(
+    135deg,
+    #ff66aa,
+    #ff3385
+  );
+}
+
+/* ========================= */
+/* Combo + Miss */
+/* ========================= */
+
+.performance {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 72px;
+
+  flex-shrink: 0;
+
+  margin-right: 8px;
+}
+
+.combo {
+  color: white;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.miss {
+  color: rgba(255,255,255,0.6);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ========================= */
+/* PP */
+/* ========================= */
+
+.pp {
+  min-width: 95px;
+
+  flex-shrink: 0;
+
+  text-align: right;
+
+  margin-right: 14px;
+
+  color: #ffcc55;
+
+  font-size: 24px;
+  font-weight: 900;
+
+  text-shadow:
+    0 0 12px rgba(255,204,85,0.18);
+}
+
+/* ========================= */
+/* Date */
+/* ========================= */
+
+.date {
+  min-width: 120px;
+
+  flex-shrink: 0;
+
+  text-align: right;
+
+  color: rgba(255,255,255,0.45);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* ========================= */
+/* Infinite marquee */
+/* ========================= */
+
+.marquee {
+  display: flex;
+  align-items: center;
+
+  width: max-content;
+
+  animation: marqueeScroll 14s linear infinite;
+}
+
+.marquee span {
+  flex-shrink: 0;
+
+  padding-right: 40px;
+}
+
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50%));
+  }
+}

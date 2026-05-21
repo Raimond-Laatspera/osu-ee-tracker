@@ -13,11 +13,6 @@ enum GameMode {
   MANIA
 }
 
-enum ManiaKeys {
-  FOUR
-  SEVEN
-}
-
 model Player {
   id            Int @id
   username      String
@@ -37,51 +32,97 @@ model Player {
 }
 
 model Beatmap {
-  id            Int @id
-  beatmapsetId  Int
+  id               Int @id
+  beatmapsetId     Int
 
-  artist        String
-  title         String
-  version       String
+  artist           String
+  title            String
+  version          String
 
-  mode          GameMode
+  mode             GameMode
 
   difficultyRating Float?
-  bpm           Float?
 
-  totalLength   Int?
-  hitLength     Int?
+  bpm              Float?
 
-  scores        Score[]
+  totalLength      Int?
+  hitLength        Int?
 
-  createdAt     DateTime @default(now())
+  ar               Float?
+  od               Float?
+  hp               Float?
+  cs               Float?
+
+  maxCombo         Int?
+
+  keyCount         Int?
+
+  scores           Score[]
+
+  createdAt        DateTime @default(now())
+
+  @@index([mode])
+  @@index([difficultyRating])
+  @@index([ar])
+  @@index([od])
 }
 
 model Score {
-  id           BigInt   @id // osu score id
+  id             BigInt @id
+  isLazer        Boolean?
+  playerId       Int
+  beatmapId      Int
 
-  playerId     Int
-  beatmapId    Int
+  player         Player @relation(fields: [playerId], references: [id])
+  beatmap        Beatmap @relation(fields: [beatmapId], references: [id])
 
-  player       Player   @relation(fields: [playerId], references: [id])
-  beatmap      Beatmap  @relation(fields: [beatmapId], references: [id])
+  gameMode       GameMode
 
-  gameMode     GameMode
-  maniaKeys    ManiaKeys?
+  pp             Float
+  accuracy       Float
 
-  pp           Float
-  accuracy     Float
+  score          BigInt?
+  combo          Int?
 
-  combo        Int?
-  score        BigInt?
+  count300       Int?
+  count100       Int?
+  count50        Int?
+  countMiss      Int?
 
-  mods         Int?
-  rank         String?
+  countGeki      Int?
+  countKatu      Int?
 
-  createdAt    DateTime
+  mods           Int?
+
+  rank           String?
+
+  effectiveAr    Float?
+  effectiveOd    Float?
+  effectiveCs    Float?
+  effectiveHp    Float?
+
+  effectiveBpm         Float?
+  effectiveStarRating  Float?
+
+  createdAt      DateTime
 
   @@index([createdAt])
   @@index([playerId, createdAt])
+  @@index([playerId, pp])
+  @@index([playerId, gameMode, createdAt])
   @@index([beatmapId])
   @@index([gameMode, createdAt])
+
+  @@index([pp])
+  @@index([accuracy])
+
+  @@index([mods])
+
+  @@index([effectiveAr])
+  @@index([effectiveOd])
+
+  @@index([effectiveBpm])
+  @@index([effectiveStarRating])
+
+  @@unique([playerId, beatmapId, createdAt])
 }

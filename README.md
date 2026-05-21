@@ -15,17 +15,17 @@ Track player scores, filter leaderboards, and explore performance across game mo
 
 ## Features
 
-* Track osu! player scores
-* Leaderboards with filtering (game mode, time range)
-* Fast API with NestJS
-* Type-safe DB layer with Prisma
-* Modern frontend with Next.js + Tailwind
+- Track osu! player scores
+- Leaderboards with filtering (game mode, time range)
+- Fast API with NestJS
+- Type-safe DB layer with Prisma
+- Modern frontend with Next.js + Tailwind
 
 ---
 
 ## Screenshots
 
-> *Will be added once front-end is more complete*
+> _Will be added once front-end is more complete_
 
 ---
 
@@ -52,9 +52,9 @@ osu-ee-tracker
 
 ## Prerequisites
 
-* Node.js (v18+)
-* npm
-* PostgreSQL (local or hosted)
+- Node.js (v18+)
+- npm
+- PostgreSQL (local or hosted)
 
 ---
 
@@ -102,9 +102,9 @@ npx prisma generate
 
 If skipped, you may see errors like:
 
-* `PrismaClient not found`
-* Missing enums (`GameMode`, `ManiaKeys`)
-* `Property 'player' does not exist`
+- `PrismaClient not found`
+- Missing enums (`GameMode`, `ManiaKeys`)
+- `Property 'player' does not exist`
 
 ---
 
@@ -314,9 +314,9 @@ npx prisma migrate dev
 
 Check:
 
-* `.env` exists
-* PostgreSQL is running
-* `DATABASE_URL` is correct
+- `.env` exists
+- PostgreSQL is running
+- `DATABASE_URL` is correct
 
 ---
 
@@ -343,11 +343,11 @@ Check:
 
 ## Future Improvements
 
-* Auth system (JWT)
-* Pagination for leaderboards
-* osu! API integration
-* Caching (Redis)
-* Docker setup
+- Auth system (JWT)
+- Pagination for leaderboards
+- osu! API integration
+- Caching (Redis)
+- Docker setup
 
 ---
 

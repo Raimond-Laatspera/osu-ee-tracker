@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { GameMode } from '@prisma/client';
-import { ManiaKeys } from '@prisma/client';
 import { getDateRange } from '../../common/utils/time-range.util';
 import { BeatmapsService } from '../beatmaps/beatmaps.service';
 
@@ -29,13 +28,19 @@ export class ScoresService {
 
       difficultyRating?: number;
       bpm?: number;
+
+      ar?: number;
+      od?: number;
+      hp?: number;
+      cs?: number;
+
+      keyCount?: number;
     };
 
     pp: number;
     accuracy: number;
 
     gameMode: GameMode;
-    maniaKeys?: ManiaKeys;
 
     combo?: number;
     score?: bigint;
@@ -64,7 +69,6 @@ export class ScoresService {
         accuracy: data.accuracy,
 
         gameMode: data.gameMode,
-        maniaKeys: data.maniaKeys,
 
         combo: data.combo,
         score: data.score,

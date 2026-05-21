@@ -1,6 +1,8 @@
 import { IsEnum, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
+
 import { Type } from 'class-transformer';
-import { GameMode, ManiaKeys } from '@prisma/client';
+
+import { GameMode } from '@prisma/client';
 
 export class CreateScoreDto {
   @IsInt()
@@ -19,9 +21,6 @@ export class CreateScoreDto {
   gameMode!: GameMode;
 
   @IsOptional()
-  @IsEnum(ManiaKeys)
-  maniaKeys?: ManiaKeys;
-
   @IsString()
-  rank!: string;
+  rank?: string;
 }

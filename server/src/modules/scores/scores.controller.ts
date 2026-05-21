@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ScoresService } from '../../modules/scores/scores.service';
 import { GameMode } from '@prisma/client';
-import { ManiaKeys } from '@prisma/client';
 
 @Controller('scores')
 export class ScoresController {
@@ -32,14 +31,19 @@ export class ScoresController {
 
         difficultyRating?: number;
         bpm?: number;
+
+        ar?: number;
+        od?: number;
+        hp?: number;
+        cs?: number;
+
+        keyCount?: number;
       };
 
       pp: number;
       accuracy: number;
 
       gameMode: GameMode;
-
-      maniaKeys?: ManiaKeys;
 
       combo?: number;
       score?: bigint;
